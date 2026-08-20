@@ -1,0 +1,10 @@
+pandas
+numpy
+faker
+matplotlib
+seaborn
+scipy
+statsmodels
+reportlab
+jupyter
+anthropic
