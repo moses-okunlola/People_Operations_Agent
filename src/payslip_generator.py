@@ -166,12 +166,18 @@ def generate_payslip_pdf(employee: pd.Series, month_label: str, out_path: str):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("hr_bonus_dataset_with_bonus.csv")
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parent.parent
+    output_dir = repo_root / "output"
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    df = pd.read_csv(repo_root / "data" / "hr_bonus_dataset_with_bonus.csv")
 
     nigeria_sample = df[df["location"].isin(NIGERIA_LOCATIONS)].iloc[0]
-    path = generate_payslip_pdf(nigeria_sample, "June 2026", f"payslip_{nigeria_sample['employee_id']}.pdf")
+    path = generate_payslip_pdf(nigeria_sample, "June 2026", str(output_dir / f"payslip_{nigeria_sample['employee_id']}.pdf"))
     print(f"Generated Nigeria PAYE payslip: {path} ({nigeria_sample['location']})")
 
     non_nigeria_sample = df[~df["location"].isin(NIGERIA_LOCATIONS)].iloc[0]
-    path2 = generate_payslip_pdf(non_nigeria_sample, "June 2026", f"payslip_{non_nigeria_sample['employee_id']}.pdf")
+    path2 = generate_payslip_pdf(non_nigeria_sample, "June 2026", str(output_dir / f"payslip_{non_nigeria_sample['employee_id']}.pdf"))
     print(f"Generated non-Nigeria payslip: {path2} ({non_nigeria_sample['location']})")
