@@ -28,11 +28,11 @@ Built with years of hands-on payroll, compensation, and benefits experience, tra
 
 | Market benchmark by department | Pay by department & gender |
 |---|---|
-| ![Department pay position vs market](chart_market_benchmark.png) | ![Base salary by department and gender](chart_pay_by_dept_gender.png) |
+| ![Department pay position vs market](assets/chart_market_benchmark.png) | ![Base salary by department and gender](assets/chart_pay_by_dept_gender.png) |
 
 | Attrition vs. comp | Bonus pool distribution |
 |---|---|
-| ![Attrition risk vs compensation](chart_attrition_comp.png) | ![Bonus pool distribution](chart_bonus_distribution.png) |
+| ![Attrition risk vs compensation](assets/chart_attrition_comp.png) | ![Bonus pool distribution](assets/chart_bonus_distribution.png) |
 
 Reading the market benchmark chart: the synthetic market_benchmark_salary is built as each role's internal median pay × a random multiplier centered at 1.03 (i.e. the synthetic "market" runs about 3% above internal pay on average, by construction). That means most departments showing a small negative gap is expected, not a real finding. HR & People's larger -5.3% gap is mostly small-sample noise from thin department+level+location groups (roughly 4 employees per group on average), not evidence of a systematic pay problem in that department specifically.
 
