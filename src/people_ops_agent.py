@@ -23,12 +23,18 @@ to see the bonus/payslip parts.
 
 import os
 import re
+from pathlib import Path
 import pandas as pd
 from bonus_engine import calculate_bonus
 from payslip_generator import generate_payslip_pdf
 from company_policies import search_policies, POLICIES
 
-DATA_PATH = "hr_bonus_dataset_with_bonus.csv"
+# Paths are resolved relative to this file's location (src/), not the
+# current working directory, so the agent runs correctly whether you
+# launch it from the repo root, from inside src/, or import it elsewhere.
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DATA_PATH = REPO_ROOT / "data" / "hr_bonus_dataset_with_bonus.csv"
+OUTPUT_DIR = REPO_ROOT / "output"
 
 # Full policy library as one text block, handed to Claude as context so it
 # only answers from what's actually in the company's policies (not from
@@ -84,8 +90,9 @@ class PeopleOpsAgent:
         employee = self._lookup_employee(employee_id)
         if employee is None:
             return f"I couldn't find employee ID '{employee_id}'. Could you double-check it?"
-        out_path = f"payslip_{employee['employee_id']}.pdf"
-        generate_payslip_pdf(employee, month_label, out_path)
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        out_path = OUTPUT_DIR / f"payslip_{employee['employee_id']}.pdf"
+        generate_payslip_pdf(employee, month_label, str(out_path))
         return (
             f"Done - I've generated a payslip for {employee['first_name']} {employee['last_name']} "
             f"({employee['employee_id']}) for {month_label}: {out_path}"
