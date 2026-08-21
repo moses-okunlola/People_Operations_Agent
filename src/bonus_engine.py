@@ -205,11 +205,11 @@ def calculate_bonus_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    here = Path(__file__).resolve().parent
-    df = pd.read_csv(here / "hr_bonus_dataset.csv")
+    data_dir = Path(__file__).resolve().parent.parent / "data"
+    df = pd.read_csv(data_dir / "hr_bonus_dataset.csv")
     bonus_df = calculate_bonus_dataframe(df)
     merged = df.merge(bonus_df, on="employee_id")
-    out_path = here / "hr_bonus_dataset_with_bonus.csv"
+    out_path = data_dir / "hr_bonus_dataset_with_bonus.csv"
     merged.to_csv(out_path, index=False)
     print(f"Computed bonuses for {len(merged)} employees -> {out_path}")
     print(merged[["employee_id", "department", "performance_bonus", "sales_commission",
