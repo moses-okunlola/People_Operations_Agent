@@ -161,7 +161,8 @@ risk = (
 df["attrition_risk_score"] = np.clip(round(risk, 1), 0, 100)
 df["left_company"] = (df["attrition_risk_score"] > np.random.normal(62, 10, size=len(df))).astype(int)
 
-out_path = Path(__file__).resolve().parent / "hr_bonus_dataset.csv"
+out_path = Path(__file__).resolve().parent.parent / "data" / "hr_bonus_dataset.csv"
+out_path.parent.mkdir(parents=True, exist_ok=True)
 df.to_csv(out_path, index=False)
 print(f"Saved {len(df)} rows to {out_path}")
 print(df.head(3).to_string())
