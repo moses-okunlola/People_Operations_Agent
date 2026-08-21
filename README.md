@@ -2,28 +2,28 @@
 
 A People Analytics portfolio project that tackles two chronic comp & benefits problems:
 
-1. **"How was my bonus calculated?"** — employees who can't or don't self-serve through the HRIS end up asking the payroll/comp team directly, one conversation at a time.
-2. **Is our pay actually fair and competitive?** — comp leaders need a fast, honest read on pay equity, market position, and whether comp is driving attrition, without a full audit engagement.
+1. **"How was my bonus calculated?"** employees who can't or don't self-serve through the HRIS end up asking the payroll/comp team directly, one conversation at a time.
+2. **Is our pay actually fair and competitive?** comp leaders need a fast, honest read on pay equity, market position, and whether comp is driving attrition, without a full audit engagement.
 
-Built with 5+ years of hands-on payroll, compensation, and benefits experience, translated into a working analytics + AI agent build.
+Built with my experience in payroll, compensation, and benefits experience, translated into a working analytics + AI agent build.
 
-**What kind of "agent" this is:** `PeopleOpsAgent` perceives a message, decides which tool to call (bonus calculator, payslip generator, or policy Q&A), and takes that action — a genuine tool-using agent, not just a script. It's a reactive, single-turn agent (one message in, one routed response out), not a fully autonomous multi-step agent that plans and chains actions on its own. Worth being precise about that distinction rather than overselling it.
+**What kind of "agent" this is:** `PeopleOpsAgent` perceives a message, decides which tool to call (bonus calculator, payslip generator, or policy Q&A), and takes that action. A genuine tool-using agent, not just a script. It's a reactive, single-turn agent (one message in, one routed response out), not a fully autonomous multi-step agent that plans and chains actions on its own. Worth being precise about that distinction rather than overselling it.
 
-**Architecture note — this sits on top of an HRIS, it doesn't replace one:** in a real deployment, the bonus and payroll numbers should always come from the company's actual system of record (e.g. Oracle Fusion HCM, Workday, SAP SuccessFactors, BambooHR — this project is written against any of them equally, Oracle is just one reference point) rather than being recalculated independently. This project's value is the explanation and self-serve layer on top of that system — translating an already-calculated number into a plain-English "here's why," which most HRIS self-service portals don't do well — not a replacement payroll engine. See `bonus_engine.py`'s docstring for where the "swap in a real HRIS" seam would go.
+**Architecture note — this sits on top of an HRIS, it doesn't replace one:** in a real deployment, the bonus and payroll numbers should always come from the company's actual system of record (e.g. Oracle Fusion HCM, Workday, SAP SuccessFactors, BambooHR — this project is written against any of them equally, Oracle is just one reference point) rather than being recalculated independently. This project's value is the explanation and self-serve layer on top of that system, translating an already-calculated number into a plain-English "here's why," which most HRIS self-service portals don't do well, not a replacement payroll engine. See `bonus_engine.py`'s docstring for where the "swap in a real HRIS" seam would go.
 
 ## What's in here
 
 | File | What it does |
 |---|---|
-| `src/generate_data.py` | Generates 1,200 fully synthetic employee records (no real company/personal data) — salary, department, level, location, performance, gender, tenure, and the raw inputs needed for a multi-component bonus. Writes to `data/`. |
-| `src/bonus_engine.py` | The transparent, auditable bonus calculation engine: Performance Bonus, Sales Commission (with accelerator), Retention Bonus, and Spot Bonus — each with a machine-generated plain-English explanation. In production, this logic mirrors/validates against the HRIS's payroll calculation rather than being the payroll system of record. |
-| `src/paye_nigeria.py` | Real Nigeria PAYE tax calculation under the Nigeria Tax Act 2025 (effective 1 Jan 2026) — progressive bands, pension, NHF, and rent relief, isolated in its own module so a future tax law change is a small, auditable edit rather than a rewrite. |
+| `src/generate_data.py` | Generates 1,200 fully synthetic employee records (no real company/personal data) salary, department, level, location, performance, gender, tenure, and the raw inputs needed for a multi-component bonus. Writes to `data/`. |
+| `src/bonus_engine.py` | The transparent, auditable bonus calculation engine: Performance Bonus, Sales Commission (with accelerator), Retention Bonus, and Spot Bonus, each with a machine-generated plain-English explanation. In production, this logic mirrors/validates against the HRIS's payroll calculation rather than being the payroll system of record. |
+| `src/paye_nigeria.py` | Real Nigeria PAYE tax calculation under the Nigeria Tax Act 2025 (effective 1 Jan 2026), progressive bands, pension, NHF, and rent relief, isolated in its own module so a future tax law change is a small, auditable edit rather than a rewrite. |
 | `notebook/analysis.ipynb` | The analytics notebook: pay equity (raw + regression-adjusted gender gap), market benchmarking by department/level, attrition-vs-comp analysis (with a logistic regression), and bonus pool distribution. Reads from `data/`, saves charts to `assets/`. |
 | `src/people_ops_agent.py` | The **People Ops Agent** — a tool-using agent that explains an employee's bonus, generates a payslip PDF on demand, and answers general people-ops questions. General Q&A calls the Claude API (Messages API) with the company policy library as context when an API key is configured, and falls back to reliable keyword matching with zero setup otherwise. |
 | `src/payslip_generator.py` | Generates a clean PDF payslip for any employee on demand (saved to `output/`), using real Nigeria PAYE for Nigeria-based employees and a clearly-flagged simplified stand-in elsewhere. |
 | `src/company_policies.py` | Synthetic company policy knowledge base the agent draws on for general Q&A (and passes to Claude as context when the API is active). |
 | `notebook/people_ops_agent_demo.ipynb` | Runnable demo of the agent in action, including the full multi-component bonus breakdown. |
-| `data/` | Generated synthetic dataset (`hr_bonus_dataset.csv`, `hr_bonus_dataset_with_bonus.csv`) — created by running the scripts above, not hand-edited. |
+| `data/` | Generated synthetic dataset (`hr_bonus_dataset.csv`, `hr_bonus_dataset_with_bonus.csv`) created by running the scripts above, not hand-edited. |
 | `assets/` | Chart images used in this README and generated by `analysis.ipynb`. |
 | `output/` | Sample generated payslip PDFs. |
 
@@ -39,7 +39,7 @@ Built with 5+ years of hands-on payroll, compensation, and benefits experience, 
 
 ## Why this scope
 
-This isn't a generic "HR dashboard" — it's built around a specific, recurring pain point from real comp & benefits work: employees don't trust or understand bonus numbers unless someone walks them through it, and that walkthrough is usually a manual, one-off Slack/email conversation. The agent automates that conversation. The notebook automates the upstream question comp leaders should be asking before employees even complain: is the pay actually fair and competitive in the first place.
+This isn't a generic "HR dashboard", it's built around a specific, recurring pain point from real comp & benefits work: employees don't trust or understand bonus numbers unless someone walks them through it, and that walkthrough is usually a manual, one-off Slack/email conversation. The agent automates that conversation. The notebook automates the upstream question comp leaders should be asking before employees even complain: is the pay actually fair and competitive in the first place.
 
 ## How to run it
 
